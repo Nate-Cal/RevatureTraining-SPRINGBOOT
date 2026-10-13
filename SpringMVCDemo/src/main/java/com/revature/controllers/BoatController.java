@@ -29,7 +29,7 @@ public class BoatController {
     @GetMapping("/all") // GET requests to /boat/all will trigger this method
     public ResponseEntity<List<Boat>> getAllBoats(){
 
-        //ResponeEntity<List<Boat>>
+        //ResponseEntity<List<Boat>>
         //== this method returns an HTTP Response that has a JSON list of Boat objects
 
         //Hardcoded list of boats - imagine we got it from a DB
@@ -68,6 +68,17 @@ public class BoatController {
 
         //If we get here, no boat was found with that id
         return ResponseEntity.notFound().build(); //404 Not Found response
+    }
+
+    @PostMapping
+    public ResponseEntity<Boat> createBoat(@RequestBody Boat boat) {
+        // TODO: User Input Validations
+
+        // Assume the incoming boat got saved to the DB (we'll just make one here)
+        Boat savedBoat = new Boat(500, boat.boatName);
+
+        // 201 CREATED with the boat in the response body
+        return ResponseEntity.status(201).body(savedBoat);
     }
 
 
