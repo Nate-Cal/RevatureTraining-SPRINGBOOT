@@ -81,6 +81,12 @@ public class BoatController {
         return ResponseEntity.status(201).body(savedBoat);
     }
 
+    /* Note about PUT, PATCH, DELETE
+        - PUT will look very similar to POST (@PutMapping and @RequestBody)
+        - PATCH will look the same ^ but typically only contain the fields you want to update
+            - Some people still do a @RequestBody, others might use @PathVariable
+        - DELETE looks similar to GET by id (@PathVariable indicating the record to delete)
+     */
 
 
     //Global Exception Handling -------------------
