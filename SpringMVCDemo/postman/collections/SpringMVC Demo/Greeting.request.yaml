@@ -1,4 +1,4 @@
 $kind: http-request
-url: ""
+url: localhost:8080/boat
 method: GET
 order: 1000

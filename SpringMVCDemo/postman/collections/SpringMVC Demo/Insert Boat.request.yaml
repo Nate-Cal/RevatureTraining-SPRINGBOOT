@@ -1,4 +1,11 @@
 $kind: http-request
-url: ""
-method: GET
+url: localhost:8080/boat
+method: POST
+body:
+  type: json
+  content: |-
+    {
+        "boatId" : 0,
+        "boatName" : "Paper"
+    }
 order: 3000
