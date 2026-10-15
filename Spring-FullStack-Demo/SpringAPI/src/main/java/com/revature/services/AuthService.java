@@ -15,12 +15,25 @@ public class AuthService {
 
     //The controllers call services, which call the DAOs (data access objects)
 
-    //The Service needs the DAO. They're both beans, so let's CONSTRUCTOR INJECT
+    //The Service needs the DAO. They're both beans, so lets CONSTRUCTOR INJECT
     private final UserDAO userDAO;
+    // We also need the UserService to find users by username
+    private final UserService userService;
 
     @Autowired
-    public AuthService(UserDAO userDAO) {
+    public AuthService(UserDAO userDAO, UserService userService) {
+
         this.userDAO = userDAO;
+        this.userService = userService;
+    }
+
+    // Login - calls the UserDAO's findByUsernameAndPassword
+    public User login(LoginDTO loginDTO) {
+        // TODO: yes we should probably do some input validation
+
+        return userDAO.findByUsernameAndPassword(
+                loginDTO.getUsername(), loginDTO.getPassword()
+        ).orElseThrow(()-> new IllegalArgumentException("Login Credentials Invalid"));
     }
 
     //Insert User - calls the UserDAO's save() method

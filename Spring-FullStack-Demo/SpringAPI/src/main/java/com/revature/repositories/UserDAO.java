@@ -22,6 +22,9 @@ public interface UserDAO extends JpaRepository<User, Integer> {
     // This is called a PROPERTY EXPRESSION
     Optional<User> findByUsername(String username);
 
+    // To check for valid login, we need ot find by username/password
+    Optional<User> findByUsernameAndPassword(String username, String password);
+
 
     //TODO: To check for valid login, we'll need a Property Expression...
 

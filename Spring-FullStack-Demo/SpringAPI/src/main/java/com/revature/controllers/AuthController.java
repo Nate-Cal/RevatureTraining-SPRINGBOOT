@@ -1,5 +1,6 @@
 package com.revature.controllers;
 
+import com.revature.jwt.JwtUtil;
 import com.revature.models.LoginDTO;
 import com.revature.models.User;
 import com.revature.services.AuthService;
@@ -18,27 +19,35 @@ public class AuthController {
 
     //Inject the UserService with Constructor Injection
     private final AuthService authService;
-
+    // Inject the JwtUtil so we can make JWTs after login
+    private final JwtUtil jwtUtil;
     @Autowired
-    public AuthController(AuthService authService) {
+    public AuthController(AuthService authService, JwtUtil jwtUtil) {
         this.authService = authService;
+        this.jwtUtil = jwtUtil;
     }
 
     //Log in User (POST Requests to /auth will get routed here)
-    //TODO: JWTs will get created upon successful login
+    // JWTs will get created/returned upon successful login
     @PostMapping
-    @CrossOrigin(origins = {"http://localhost:3000", "http://localhost:4200"}, allowedHeaders = "*")
     public ResponseEntity<?> login(@RequestBody LoginDTO loginDTO){
 
-        System.out.println(loginDTO);
+        User loggedInUser = authService.login(loginDTO);
 
-        //(hardcoded) Upon successful login, return a 200 OK and a success message
-        if(loginDTO.getUsername().equals("user") && loginDTO.getPassword().equals("pass")){
-            return ResponseEntity.ok().body(loginDTO);
-        } else {
-            //otherwise... send a 401 Unauthorized with a failure message
-            return ResponseEntity.status(401).body("Invalid credentials");
-        }
+        // If the User was null^ login failed and Exception was thrown from the service
+
+        // Now we can make and return the JWT!
+        String token = jwtUtil.generateToken(
+                loggedInUser.getUsername(),
+                loggedInUser.getRole(),
+                loggedInUser.getUserId()
+        );
+
+        System.out.println("Token: " + token);
+
+        return ResponseEntity.ok(token);
+
+
 
     }
 
